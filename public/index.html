@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>2B Community</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>2B Community</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg">
-<div class="glass center">
-<h1>2B Community</h1>
-<p>Inserisci il tuo nome reale</p>
-<input id="name" placeholder="Nome">
-<button onclick="go()">Entra</button>
-</div>
-<script>
-function go(){
- if(!name.value)return;
- localStorage.setItem("username",name.value);
- location.href="menu.html";
-}
-</script>
+    <div class="glass center">
+        <h1>2B Community</h1>
+        <p>Inserisci il tuo nome reale</p>
+        <input id="name" placeholder="Nome">
+        <button onclick="go()">Entra</button>
+    </div>
+
+    <script>
+        function go(){
+            // Prendi l'input dal DOM
+            const nameInput = document.getElementById("name");
+
+            // Se l'input è vuoto non fare nulla
+            if(!nameInput.value) return;
+
+            // Salva il nome nel localStorage
+            localStorage.setItem("username", nameInput.value);
+
+            // Vai alla pagina del menu
+            location.href = "menu.html";
+        }
+
+        // Optional: se l'utente ha già inserito un nome, vai direttamente al menu
+        const savedName = localStorage.getItem("username");
+        if(savedName) {
+            location.href = "menu.html";
+        }
+    </script>
 </body>
 </html>
