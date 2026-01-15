@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Menu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="bg">
+<div class="glass center">
+<h1>Scegli una chat</h1>
+<button onclick="openChat('fun')">🎉 Divertimento</button>
+<button onclick="openChat('study')">📚 Studio</button>
+</div>
+<script>
+if(!localStorage.getItem("username"))location.href="index.html";
+function openChat(r){location.href="chat.html?room="+r}
+</script>
+</body>
+</html>

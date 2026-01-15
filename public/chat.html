@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Chat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="bg">
+<div class="chatBox glass">
+<h2 id="title"></h2>
+<div id="chat"></div>
+<div class="send">
+<input id="msg" placeholder="Scrivi...">
+<button onclick="send()">➤</button>
+</div>
+</div>
+<script>
+const room=new URLSearchParams(location.search).get("room");
+const user=localStorage.getItem("username");
+title.innerText=room=="fun"?"🎉 Chat Divertimento":"📚 Chat Studio";
+
+async function load(){
+ const r=await fetch("/api/messages/"+room);
+ const d=await r.json();
+ chat.innerHTML="";
+ d.forEach(m=>{
+  chat.innerHTML+=`<div class="msg"><b>${m.username}</b><span>${m.timestamp}</span><p>${m.text}</p></div>`;
+ });
+ chat.scrollTop=chat.scrollHeight;
+}
+async function send(){
+ if(!msg.value)return;
+ await fetch("/api/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+ body:JSON.stringify({room,username:user,text:msg.value,timestamp:new Date().toLocaleString()})});
+ msg.value=""; load();
+}
+setInterval(load,1500); load();
+</script>
+</body>
+</html>
