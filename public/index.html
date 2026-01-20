@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8">
     <title>2B Community</title>
     <link rel="stylesheet" href="style.css">
@@ -36,3 +37,24 @@
     </script>
 </body>
 </html>
+=======
+<meta charset="UTF-8">
+<title>2B Community</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="center">
+<div class="box">
+<h1>2B Community</h1>
+<input id="name" placeholder="Nome reale">
+<button onclick="go()">Entra</button>
+</div>
+<script>
+function go(){
+if(!name.value)return
+localStorage.setItem("user",name.value)
+location.href="menu.html"
+}
+</script>
+</body>
+</html>
+>>>>>>> e9de0cd (Initial commit - 2B Community Chat)

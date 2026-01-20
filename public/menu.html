@@ -5,6 +5,7 @@
 <title>Menu</title>
 <link rel="stylesheet" href="style.css">
 </head>
+<<<<<<< HEAD
 <body class="bg">
 <div class="glass center">
 <h1>Scegli una chat</h1>
@@ -13,6 +14,16 @@
 </div>
 <script>
 if(!localStorage.getItem("username"))location.href="index.html";
+=======
+<body class="center">
+<div class="box">
+<h2>Scegli chat</h2>
+<button onclick="openChat('fun')">Divertimento</button>
+<button onclick="openChat('study')">Studio</button>
+</div>
+<script>
+if(!localStorage.getItem("user"))location.href="index.html"
+>>>>>>> e9de0cd (Initial commit - 2B Community Chat)
 function openChat(r){location.href="chat.html?room="+r}
 </script>
 </body>

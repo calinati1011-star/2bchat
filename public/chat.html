@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Chat</title>
 <link rel="stylesheet" href="style.css">
+<<<<<<< HEAD
 </head>
 <body class="bg">
 <div class="chatBox glass">
@@ -35,6 +36,64 @@ async function send(){
  msg.value=""; load();
 }
 setInterval(load,1500); load();
+=======
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div class="layout">
+<div class="sidebar">
+<h3>Online</h3>
+<ul id="users"></ul>
+</div>
+<div class="chatbox">
+<div id="messages"></div>
+<div class="input">
+<input id="msg" placeholder="Messaggio">
+<input type="file" id="img">
+<button onclick="send()">Invia</button>
+</div>
+</div>
+</div>
+<script>
+const room=new URLSearchParams(location.search).get("room")
+const user=localStorage.getItem("user")
+const s=io()
+s.emit("join",{room,user})
+
+s.on("users",u=>{
+users.innerHTML=""
+u.forEach(n=>users.innerHTML+=`<li onclick="kick('${n}')">${n}</li>`)
+})
+
+s.on("history",h=>h.forEach(add))
+s.on("msg",add)
+s.on("system",t=>messages.innerHTML+=`<div class='sys'>${t}</div>`)
+
+function add(m){
+messages.innerHTML+=m.type=="img"
+?`<div class='msg'><b>${m.user}</b><br><img src="${m.content}"></div>`
+:`<div class='msg'><b>${m.user}</b> ${m.content}</div>`
+messages.scrollTop=messages.scrollHeight
+}
+
+async function send(){
+if(img.files[0]){
+const fd=new FormData()
+fd.append("image",img.files[0])
+const r=await fetch("/upload",{method:"POST",body:fd})
+const d=await r.json()
+s.emit("msg",{room,user,type:"img",content:d.path})
+img.value=""
+}else if(msg.value){
+s.emit("msg",{room,user,type:"text",content:msg.value})
+msg.value=""
+}
+}
+
+function kick(u){
+if(confirm("Votare kick "+u+"?"))s.emit("votekick",u)
+}
+>>>>>>> e9de0cd (Initial commit - 2B Community Chat)
 </script>
 </body>
 </html>

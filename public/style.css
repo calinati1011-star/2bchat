@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *{box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 .bg{
  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
@@ -35,3 +36,22 @@ button:hover{transform:scale(1.08);background:#ff85b8}
 .send input{flex:1}
 @keyframes slide{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
+=======
+*{box-sizing:border-box;font-family:Arial}
+body,html{margin:0;height:100%;background:#0e1621;color:white}
+.center{display:flex;align-items:center;justify-content:center;height:100%}
+.box{background:#1c2733;padding:40px;border-radius:12px;text-align:center}
+input,button{padding:10px;margin:8px;width:100%;border:none;border-radius:8px}
+button{background:#3b82f6;color:white;cursor:pointer}
+.layout{display:flex;height:100%}
+.sidebar{width:220px;background:#111827;padding:10px}
+.chatbox{flex:1;display:flex;flex-direction:column}
+#messages{flex:1;overflow:auto;padding:10px}
+.msg{background:#1f2937;margin:6px;padding:8px;border-radius:8px}
+.msg img{max-width:200px;border-radius:8px}
+.sys{color:#f87171;text-align:center}
+.input{display:flex;padding:10px;gap:5px;background:#111827}
+ul{list-style:none;padding:0}
+li{cursor:pointer;padding:4px}
+li:hover{background:#374151}
+>>>>>>> e9de0cd (Initial commit - 2B Community Chat)
