@@ -4,102 +4,75 @@
 <meta charset="UTF-8">
 <title>Chat</title>
 <link rel="stylesheet" href="style.css">
-<<<<<<< HEAD
-<<<<<<< HEAD
-</head>
-<body class="bg">
-<div class="chatBox glass">
-<h2 id="title"></h2>
-<div id="chat"></div>
-<div class="send">
-<input id="msg" placeholder="Scrivi...">
-<button onclick="send()">➤</button>
-</div>
-</div>
-<script>
-const room=new URLSearchParams(location.search).get("room");
-const user=localStorage.getItem("username");
-title.innerText=room=="fun"?"🎉 Chat Divertimento":"📚 Chat Studio";
-
-async function load(){
- const r=await fetch("/api/messages/"+room);
- const d=await r.json();
- chat.innerHTML="";
- d.forEach(m=>{
-  chat.innerHTML+=`<div class="msg"><b>${m.username}</b><span>${m.timestamp}</span><p>${m.text}</p></div>`;
- });
- chat.scrollTop=chat.scrollHeight;
-}
-async function send(){
- if(!msg.value)return;
- await fetch("/api/messages",{method:"POST",headers:{"Content-Type":"application/json"},
- body:JSON.stringify({room,username:user,text:msg.value,timestamp:new Date().toLocaleString()})});
- msg.value=""; load();
-}
-setInterval(load,1500); load();
-=======
-=======
->>>>>>> 2e81a44 (Initial commit - 2B Community Chat)
 <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-<div class="layout">
-<div class="sidebar">
-<h3>Online</h3>
-<ul id="users"></ul>
+<div class="chat-container">
+  <div class="users" id="users"></div>
+  <div class="messages" id="messages"></div>
+  <input type="text" id="msgInput" placeholder="Scrivi un messaggio">
+  <input type="file" id="imgInput">
+  <button onclick="sendMsg()">Invia</button>
 </div>
-<div class="chatbox">
-<div id="messages"></div>
-<div class="input">
-<input id="msg" placeholder="Messaggio">
-<input type="file" id="img">
-<button onclick="send()">Invia</button>
-</div>
-</div>
-</div>
-<script>
-const room=new URLSearchParams(location.search).get("room")
-const user=localStorage.getItem("user")
-const s=io()
-s.emit("join",{room,user})
 
-s.on("users",u=>{
-users.innerHTML=""
-u.forEach(n=>users.innerHTML+=`<li onclick="kick('${n}')">${n}</li>`)
+<script>
+const socket = io()
+const params = new URLSearchParams(window.location.search)
+const room = params.get("room")
+const username = localStorage.getItem("username")
+if(!username) location.href = "index.html"
+
+socket.emit("join",{user:username,room})
+
+const messages = document.getElementById("messages")
+const users = document.getElementById("users")
+
+socket.on("history",data => {
+  data.forEach(m => addMsg(m))
 })
 
-s.on("history",h=>h.forEach(add))
-s.on("msg",add)
-s.on("system",t=>messages.innerHTML+=`<div class='sys'>${t}</div>`)
+socket.on("msg", addMsg)
+socket.on("system", m => addSysMsg(m))
+socket.on("users", list => users.innerHTML = list.map(u=>u).join("<br>"))
 
-function add(m){
-messages.innerHTML+=m.type=="img"
-?`<div class='msg'><b>${m.user}</b><br><img src="${m.content}"></div>`
-:`<div class='msg'><b>${m.user}</b> ${m.content}</div>`
-messages.scrollTop=messages.scrollHeight
-}
-
-async function send(){
-if(img.files[0]){
-const fd=new FormData()
-fd.append("image",img.files[0])
-const r=await fetch("/upload",{method:"POST",body:fd})
-const d=await r.json()
-s.emit("msg",{room,user,type:"img",content:d.path})
-img.value=""
-}else if(msg.value){
-s.emit("msg",{room,user,type:"text",content:msg.value})
-msg.value=""
-}
+function addMsg(m){
+  const el = document.createElement("div")
+  if(m.type === "text") el.textContent = `[${m.time}] ${m.user}: ${m.content}`
+  if(m.type === "image"){
+    const img = document.createElement("img")
+    img.src = m.content
+    img.style.maxWidth = "200px"
+    el.appendChild(document.createTextNode(`[${m.time}] ${m.user}: `))
+    el.appendChild(img)
+  }
+  messages.appendChild(el)
+  messages.scrollTop = messages.scrollHeight
 }
 
-function kick(u){
-if(confirm("Votare kick "+u+"?"))s.emit("votekick",u)
+function addSysMsg(m){
+  const el = document.createElement("div")
+  el.style.color="red"
+  el.textContent = m
+  messages.appendChild(el)
+  messages.scrollTop = messages.scrollHeight
 }
-<<<<<<< HEAD
->>>>>>> e9de0cd (Initial commit - 2B Community Chat)
-=======
->>>>>>> 2e81a44 (Initial commit - 2B Community Chat)
+
+function sendMsg(){
+  const input = document.getElementById("msgInput")
+  const file = document.getElementById("imgInput").files[0]
+  if(file){
+    const form = new FormData()
+    form.append("image",file)
+    fetch("/upload",{method:"POST",body:form})
+      .then(res=>res.json())
+      .then(data=>{
+        socket.emit("msg",{room,user:username,type:"image",content:data.path})
+      })
+  } else if(input.value){
+    socket.emit("msg",{room,user:username,type:"text",content:input.value})
+  }
+  input.value=""
+}
 </script>
 </body>
 </html>

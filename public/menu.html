@@ -2,35 +2,22 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Menu</title>
+<title>2B Community Menu</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<body class="bg">
-<div class="glass center">
-<h1>Scegli una chat</h1>
-<button onclick="openChat('fun')">🎉 Divertimento</button>
-<button onclick="openChat('study')">📚 Studio</button>
+<body>
+<div class="center-box">
+  <h1>Benvenuto!</h1>
+  <button onclick="start('divertimento')">Chat Divertimento</button>
+  <button onclick="start('studio')">Chat Studio</button>
 </div>
 <script>
-if(!localStorage.getItem("username"))location.href="index.html";
-=======
-=======
->>>>>>> 2e81a44 (Initial commit - 2B Community Chat)
-<body class="center">
-<div class="box">
-<h2>Scegli chat</h2>
-<button onclick="openChat('fun')">Divertimento</button>
-<button onclick="openChat('study')">Studio</button>
-</div>
-<script>
-if(!localStorage.getItem("user"))location.href="index.html"
-<<<<<<< HEAD
->>>>>>> e9de0cd (Initial commit - 2B Community Chat)
-=======
->>>>>>> 2e81a44 (Initial commit - 2B Community Chat)
-function openChat(r){location.href="chat.html?room="+r}
+const username = localStorage.getItem("username")
+if(!username) location.href = "index.html"
+
+function start(room){
+  location.href = "chat.html?room=" + room
+}
 </script>
 </body>
 </html>

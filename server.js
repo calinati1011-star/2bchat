@@ -38,18 +38,18 @@ io.on("connection", s => {
         io.to(m.room).emit("msg", m)
     })
 
-    s.on("votekick", t => {
+    s.on("votekick", target => {
         votes[s.room] = votes[s.room] || {}
-        votes[s.room][t] = votes[s.room][t] || {}
-        votes[s.room][t][s.id] = true
+        votes[s.room][target] = votes[s.room][target] || {}
+        votes[s.room][target][s.id] = true
         const total = Object.keys(rooms[s.room]).length
-        const yes = Object.keys(votes[s.room][t]).length
+        const yes = Object.keys(votes[s.room][target]).length
         if (yes / total >= 0.6) {
             for (const id in rooms[s.room]) {
-                if (rooms[s.room][id] === t) io.sockets.sockets.get(id)?.disconnect()
+                if (rooms[s.room][id] === target) io.sockets.sockets.get(id)?.disconnect()
             }
-            io.to(s.room).emit("system", t + " espulso")
-            delete votes[s.room][t]
+            io.to(s.room).emit("system", target + " è stato espulso")
+            delete votes[s.room][target]
         }
     })
 
